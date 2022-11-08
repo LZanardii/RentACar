@@ -16,12 +16,85 @@
   </form>
 
   <p></p>
-  
-  {% if veiculos %}
 
-    {{locacoes[0].veiculo.modelo}}
-
-  {% endif %}
+    <table>
+      <tr>
+        <th>
+          Cliente
+        </th>
+        <th>
+          Modelo
+        </th>
+        <th>
+          Cidade de Origem
+        </th>
+        <th>
+          Cidade de Destino
+        </th>
+        <th>
+          KM Rodados
+        </th>
+        <th>
+          Quantidade de Dias
+        </th>
+        <th>
+          Valor Total
+        </th>
+      </tr>
+      {% if locacoes %}
+        {% if locacoes[0] %}
+          {% for locacao in locacoes %}
+            <tr>
+              <td>
+                {{locacao.cliente.nome}}
+              </td>
+              <td>
+                {{locacao.veiculo.modelo}}
+              </td>
+              <td>
+                {{locacao.cidade_origem.nome}}
+              </td>
+              <td>
+                {% if locacao.cidade_destino %}
+                  {{locacao.cidade_destino.nome}}
+                {% else %}
+                  Dado não mapeado
+                {% endif %}
+              </td>
+              <td>
+                {% if locacao.km_rodado %}
+                  {{locacao.km_rodado}}
+                {% else %}
+                  Dado não mapeado
+                {% endif %}
+              </td>
+              <td>
+                {{locacao.qt_dias_reservados}}
+              </td>
+              <td>
+                {% if locacao.km_rodado %}
+                  {{locacao.km_rodado * locacao.veiculo.valor_km_rodado + locacao.qt_dias_reservados * locacao.veiculo.valor_km_rodado}}
+                {% else %}
+                  Locação não finalizada
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="7" class="center">
+              {{locacoes}}
+            </td>
+          </tr>
+        {% endif %}
+      {% else %}
+        <tr>
+          <td colspan="9" class="center">
+            Preencha algum campo de consulta para pesquisar!
+          </td>
+        </tr> 
+      {% endif %}
+    </table>
 
 </section>
   
