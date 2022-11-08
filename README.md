@@ -1,5 +1,5 @@
 <h1 align="center"> Sistema para Locadora de Veículos </h1>
-<h3>Flask Framework</h3>
+<h3>Usando Flask Framework</h3>
 <p> 
   O trabalho consiste em desenvolver um sistema Web simplificado para locadoras de veículos.
 O código fonte deve ser desenvolvido em Python 3, utilizar o conteúdo trabalhado em aula. O
