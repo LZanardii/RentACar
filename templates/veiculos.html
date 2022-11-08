@@ -1,0 +1,109 @@
+{% extends "main.html" %}
+
+{% block main %}
+
+<section class="main">
+  <h1>Consultar Veículos</h1>
+
+  <form action="{{ url_for('veiculos') }}" method="post">
+    {{ form.csrf_token }}
+    <p>COR:</p>
+    {{ form.cor }}
+    <p>MODELO:</p>
+    {{ form.modelo }}
+    <p>ANO:</p>
+    {{ form.ano }}
+    <p>CIDADE:</p>
+    {{ form.cidade }}
+    <p>SOMENTE DISPONÍVEIS:</p>
+    {{ form.disponivel }}
+    <p></p>
+    {{ form.submit }}
+  </form>
+
+  <p></p>
+
+  <table>
+    <tr>
+      <th>
+        Cidade
+      </th>
+      <th>
+        Modelo
+      </th>
+      <th>
+        Cor
+      </th>
+      <th>
+        Ano
+      </th>
+      <th>
+        Odômetro
+      </th>
+      <th>
+        Disponível
+      </th>
+      <th>
+        R$ Diária
+      </th>
+      <th>
+        R$ Km rodado
+      </th>
+    </tr>
+    {% if veiculos %}
+      {% if veiculos[0] %}
+        {% for veiculo in veiculos %}
+          <tr>
+            <td>
+              {{veiculo[1].nome}}
+            </td>
+            <td>
+              {{veiculo[0].modelo}}
+            </td>
+            <td>
+              {{veiculo[0].cor}}
+            </td>
+            <td>
+              {{veiculo[0].ano}}
+            </td>
+            <td>
+              {{veiculo[0].odometro}}
+            </td>
+            <td>
+              {% if veiculo[0].disponivel %}
+                Sim
+              {% else %}
+                Não
+              {% endif %}
+            </td>
+            <td>
+              {{veiculo[0].valor_diaria}}
+            </td>
+            <td>
+              {{veiculo[0].valor_km_rodado}}
+            </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="9" class="center">
+            {{veiculos}}
+          </td>
+        </tr>
+      {% endif %}
+    {% else %}
+      <tr>
+        <td colspan="9" class="center">
+          Preencha algum campo de consulta para melhorar sua pesquisa!
+        </td>
+      </tr> 
+    {% endif %}
+
+    </table>
+  
+
+  <p></p>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+
+{% block main %}
+
+<section class="main">
+  <h1>Consultar Locações</h1>
+
+  <form action="{{ url_for('locacoes') }}" method="post">
+    {{ form.csrf_token }}
+    <p>CLIENTE:</p>
+    {{ form.cliente }}
+    <p>MODELO:</p>
+    {{ form.modelo }}
+    <p></p>
+    {{ form.submit }}
+  </form>
+
+  <p></p>
+  
+  {% if veiculos %}
+
+    {{locacoes[0].veiculo.modelo}}
+
+  {% endif %}
+
+</section>
+  
+{% endblock %}

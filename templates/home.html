@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+
+{% block main %}
+
+<section>
+    <nav>
+        <a href="{{ url_for('veiculos') }}">Consultar veículos</a>
+        <a href="{{ url_for('locacao') }}">Realizar locação</a>
+        <a href="{{ url_for('devolucao') }}">Realizar devolução</a>
+        <a href="{{ url_for('locacoes') }}">Consultar locações</a>
+        <a href="{{ url_for('resumo') }}">Resumo</a>
+    </nav>
+</section>
+
+{% endblock %}
