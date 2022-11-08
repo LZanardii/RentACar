@@ -17,7 +17,7 @@ def create_json_locacao(locacoes):
     )
   return json.dumps(list_locacoes)
 
-def create_file_locacao(name ,locacoes):
+def create_file_locacao(name, locacoes):
   locacoes_json = json.loads(locacoes)
   with open(name, 'w', encoding="UTF-8") as f:
     f.write('| Clinete | Modelo | Cidade de Origem | Cidade de Destino | KM Rodados | Quantidade de Dias | Valor Total |' + '\n')
@@ -28,4 +28,12 @@ def create_file_locacao(name ,locacoes):
            locacao['cidade_origem'], locacao['cidade_destino'],\
             locacao['km_rodado'], locacao['qtd_dias'], locacao['valor_total']) \
           + '\n')
+    f.close()
+
+def create_file_resumo(name, resumo):
+  resumo_json = json.loads(resumo)
+  with open(name, 'w', encoding="UTF-8") as f:
+    f.write('| KMs até agora | Total R$ KM  | Dias Reservados | Total R$ Diárias | Total R$ |' + '\n')
+    f.write('|---------------|--------------|-----------------|------------------|----------|' + '\n')
+    f.write('| {} | {} | {} | {} | {} |'.format(resumo_json[0], resumo_json[1], resumo_json[2], resumo_json[3], resumo_json[4]))
     f.close()

@@ -2,10 +2,122 @@
 
 {% block main %}
 
-<section>
-    <div style="padding: 10px; background-color: #EEE; margin: 20px">
-        <h1>Resumo</h1>
-    </div>
+<section class="main">
+  <h1>Locações Finalizadas</h1>
+
+  <p></p>
+
+  <table>
+    <tr>
+      <th>
+        Carro
+      </th>
+      <th>
+        KMs Rodados
+      </th>
+      <th>
+        Total R$ KM Rodados
+      </th>
+      <th>
+        Dias Reservados
+      </th>
+      <th>
+        Total R$ Diárias
+      </th>
+      <th>
+        Total
+      </th>
+    </tr>
+    {% if locacoes %}
+      {% for locacao in locacoes %}
+        <tr>
+          <td>
+            {{locacao.veiculo.modelo}} - {{locacao.veiculo.cor}}
+          </td>
+          <td>
+            {{locacao.km_rodado}}
+          </td>
+          <td>
+            {{locacao.km_rodado * locacao.veiculo.valor_km_rodado}}
+          </td>
+          <td>
+            {{locacao.qt_dias_reservados}}
+          </td>
+          <td>
+            {{locacao.qt_dias_reservados * locacao.veiculo.valor_diaria}}
+          </td>
+          <td>
+            {{locacao.km_rodado * locacao.veiculo.valor_km_rodado + locacao.qt_dias_reservados * locacao.veiculo.valor_km_rodado}}
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="6" class="center">
+          {{locacoes[0]}}
+        </td>
+      </tr>
+    {% endif %}
+
+    </table>
+    <p></p>
+
+    <h1>Resumo (Todas as locações finalizadas)</h1>
+
+    <p></p>
+
+    <table>
+      <tr>
+        <th>
+          KMs até agora
+        </th>
+        <th>
+          Total R$ KM 
+        </th>
+        <th>
+          Dias Reservados
+        </th>
+        <th>
+          Total R$ Diárias
+        </th>
+        <th>
+          Total R$
+        </th>
+      </tr>
+      {% if resumo %}
+        <tr>
+          <td>
+            {{resumo[0]}}
+          </td>
+          <td>
+            {{resumo[1]}}
+          </td>
+          <td>
+            {{resumo[2]}}
+          </td>
+          <td>
+            {{resumo[3]}}
+          </td>
+          <td>
+            {{resumo[4]}}
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="6" class="center">
+            Erro ao carregar dados resumidos
+          </td>
+        </tr>
+      {% endif %}
+    </table>
+    
+    <form action="{{ url_for('resumo_md_download')}}" method = "post">
+      <input style="display: none;" type = "text" name='resumo' value ='{{resumo}}' />
+      <p></p>
+      <input type = "submit" value = "Download" />
+    </form>
+
+    <p></p>
 </section>
 
 {% endblock %}

@@ -3,7 +3,8 @@ from service import veiculoService, locacoesService
 import flask
 from flask import render_template, send_file, request, redirect, url_for
 from forms import SearchLocacoesForms, SearchVeiculosForms
-from utils import create_json_locacao, create_file_locacao
+from utils import create_json_locacao, create_file_locacao, create_file_resumo
+from datetime import date
 
 @app.route('/')
 @app.route('/home')
@@ -43,6 +44,18 @@ def locacoes_md_download():
   create_file_locacao(name, request.form['locacoes'])
   return send_file(name, as_attachment=True)
 
-@app.route('/resumo')
+@app.route('/resumo', methods=['POST', 'GET'])
 def resumo():
-  return render_template('resumo.html')
+  locacoes_service = locacoesService.LocacoesService()
+  locacoes_finalizadas = locacoes_service.get_locacoes_finalizadas()
+  resumo = locacoes_service.get_resumo_todas_locacoes_finalizadas(locacoes_finalizadas)
+  return render_template('resumo.html', locacoes=locacoes_finalizadas, resumo=resumo)
+
+@app.route('/resumo/download', methods=['POST', 'GET'])
+def resumo_md_download():
+  if flask.request.method == 'GET':
+    return redirect(url_for('resumo'))
+  date_now = date.today()
+  name = f'RentACar-Resumo{date_now}.md'
+  create_file_resumo(name, request.form['resumo'])
+  return send_file(name, as_attachment=True)

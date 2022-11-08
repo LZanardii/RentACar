@@ -30,3 +30,14 @@ class LocacaoDao:
           .join(cidade_origem, cidade_origem.id == entities.Locacao.cidade_origem_id)\
             .outerjoin(cidade_destino, cidade_destino.id == entities.Locacao.cidade_destino_id, isouter=True)\
               .where(*queries).all()
+
+  def get_locacoes_finalizadas(self):
+    cidade_origem = aliased(entities.Cidade)
+    cidade_destino = aliased(entities.Cidade)
+    
+    return session.query(entities.Locacao)\
+      .join(entities.Cliente)\
+        .join(entities.Veiculo)\
+          .join(cidade_origem, cidade_origem.id == entities.Locacao.cidade_origem_id)\
+            .join(cidade_destino, cidade_destino.id == entities.Locacao.cidade_destino_id)\
+              .where().all()
