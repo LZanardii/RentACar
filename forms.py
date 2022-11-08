@@ -34,3 +34,4 @@ class SearchLocacoesForms(FlaskForm):
     if (self.cliente.data != "" or self.modelo.data != ""):
       return True
     return False
+      
