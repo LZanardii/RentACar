@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, SubmitField, BooleanField, SelectField, RadioField, TextAreaField
 from wtforms.validators import Length, DataRequired
 from service import veiculoService, clienteService, cidadeService
         
@@ -10,15 +10,7 @@ class SearchVeiculosForms(FlaskForm):
   cidade = StringField('cidade', validators=[Length(min=1)]) 
   disponivel = BooleanField('disponivel') 
   submit = SubmitField('Pesquisar') 
-    # def is_valid(self):
-    #     if (
-    #         self.cor.validate(Length(min=1)) == False and 
-    #         self.ano.validate(Length(min=1)) == False and 
-    #         self.modelo.validate(Length(min=1)) == False and
-    #         self.disponivel.validate(self.disponivel.data == False) and
-    #         self.cidade.validate(Length(min=1)) == False):
-    #         return False
-    #     return True
+
 class SearchLocacoesForms(FlaskForm):
   veiculos = veiculoService.VeiculoService()
   clientes = clienteService.ClienteService()

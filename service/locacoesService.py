@@ -45,3 +45,11 @@ class LocacoesService:
 
     return [km_total, valor_km_total, diaria_total, valor_diaria_total, valor_total]
 
+  def create_locacao(self, cliente, cidade, veiculo, diarias):
+    try:
+      locacao = locacaoDao.LocacaoDao()
+      locacao.create_locacao(cliente, cidade, veiculo, diarias)
+    except Exception as e:
+      raise e
+    
+

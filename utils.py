@@ -1,4 +1,6 @@
 import json
+from service import clienteService, cidadeService
+from flask import redirect, url_for, flash
 
 def create_json_locacao(locacoes):
   NULL_ATRIBUTE = "Dado nao mapeado"
@@ -37,3 +39,36 @@ def create_file_resumo(name, resumo):
     f.write('|---------------|--------------|-----------------|------------------|----------|' + '\n')
     f.write('| {} | {} | {} | {} | {} |'.format(resumo_json[0], resumo_json[1], resumo_json[2], resumo_json[3], resumo_json[4]))
     f.close()
+
+def locacao_validations(cliente, cidade):
+  cliente_service = clienteService.ClienteService()
+  cidade_service = cidadeService.CidadeService()
+
+  if cliente_service.have_locacao_ativa_search_by_name(cliente):
+    flash(f'Cliente {cliente} possui locação em aberto! Finalize antes de realizar outra locação')
+    redirect(url_for('locacao'))
+    return
+
+  veiculos_disponiveis = cidade_service.get_veiculos_disponiveis_by_cidade_name(cidade)
+
+  if len(veiculos_disponiveis) == 0:
+    flash(f'{cidade} não possui carros disponíveis')
+    redirect(url_for('locacao'))
+    return
+  return veiculos_disponiveis
+
+def create_json_veiuclos_disponiveis(veiculos):
+  if veiculos:
+    list_veiculos = []
+    for veiculo in veiculos:
+      list_veiculos.append(
+        {
+          "id": veiculo.id,
+          "modelo": str(veiculo.modelo), 
+          "cor": str(veiculo.cor), 
+          "ano": str(veiculo.ano), 
+        }
+      )
+    return json.loads(json.dumps(list_veiculos))
+  else:
+    return []

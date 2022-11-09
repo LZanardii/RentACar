@@ -6,12 +6,12 @@
   <h1>Locação Veículos</h1>
 
   {% if get_flashed_messages() %}
-    <div class="alert">
-      {% for message in get_flashed_messages() %}
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <strong>Cuidado!</strong> {{ message }}
-      {% endfor %}
-    </div>
+  <div class="alert">
+    {% for message in get_flashed_messages() %}
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    <strong>Cuidado!</strong> {{ message }}
+    {% endfor %}
+  </div>
   {% endif %}
 
   <form action="{{ url_for('locacao') }}" method="post">
@@ -23,6 +23,56 @@
     <p></p>
     {{ form.submit }}
   </form>
+
+  <p></p>
+
+  {% if veiculos %}
+  <form action="{{url_for('locacao_save')}}" method="post" class="main">
+    {% if cliente_id %}
+      <input style="display: none;" name='cliente' type="text" value='{{cliente_id}}'>
+    {% endif %}
+    {% if cidade_id %}
+      <input style="display: none;" name='cidade' type="texy" value='{{cidade_id}}'>
+    {% endif %}
+    <table>
+      <tr>
+        <th>
+          Modelo
+        </th>
+        <th>
+          Cor
+        </th>
+        <th>
+          Ano
+        </th>
+        <th>
+          &nbsp;
+        </th>
+      </tr>
+      {% for veiculo in veiculos %}
+      <tr>
+        <td>
+          {{veiculo["modelo"]}}
+        </td>
+        <td>
+          {{veiculo["cor"]}}
+        </td>
+        <td>
+          {{veiculo["ano"]}}
+        </td>
+        <td style="max-width: 50px;">
+          <input type="radio" id='{{veiculo["modelo"]}}-{{veiculo["cor"]}}-{{veiculo["ano"]}}' name="veiculo" value='{{veiculo["id"]}}'>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p></p>
+    <label>Diárias</label>
+    <input style="max-width: 50px;" name='diaria' type="number">
+    <p></p>
+    <input style="max-width: 50px;" type="submit" value="Realizar Locação">
+  </form>
+  {% endif %}
 
 </section>
 

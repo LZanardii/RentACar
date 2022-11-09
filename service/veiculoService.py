@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from dao import veiculoDao
-
 class VeiculoService:
   def get_all_veiculos(self):
     try:
@@ -37,5 +36,12 @@ class VeiculoService:
       return modelos
     else:
       return["Erro ao carregar modelos"]
+  
+  def get_veiculos_disponiveis_by_cidade_id(self, id):
+    veiculo = veiculoDao.VeiculoDao()
+    query = veiculo.get_veiculos_disponiveis_by_cidade_id(id)
+    if query:
+      return query
+    return []
 
         

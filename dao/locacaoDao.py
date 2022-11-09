@@ -2,6 +2,7 @@
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import aliased
 from model import entities
+from dao import veiculoDao
 
 Session = orm.sessionmaker(bind=entities.engine)
 session = Session()
@@ -52,3 +53,13 @@ class LocacaoDao:
           .join(cidade_origem, cidade_origem.id == entities.Locacao.cidade_origem_id)\
             .outerjoin(cidade_destino, cidade_destino.id == entities.Locacao.cidade_destino_id, isouter=True)\
               .where(entities.Cliente.id == id).filter(entities.Locacao.km_rodado == None).all()
+  
+  def create_locacao(self, cliente, cidade, veiculo, diarias):
+    try:
+      veiculo_dao = veiculoDao.VeiculoDao()
+      locacao = entities.Locacao(cliente_id=cliente, veiculo_id=veiculo, cidade_origem_id=cidade, qt_dias_reservados=diarias)
+      session.add(locacao)
+      veiculo_dao.update_disponibilidade(veiculo, False)
+      session.commit()
+    except Exception:
+      raise Exception("Erro ao salvar locação")

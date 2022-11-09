@@ -94,6 +94,14 @@ select {
 
 input {
     min-width: 200px;
+    font-size: medium;
+    height: 25px;
+}
+
+label {
+    font-size: medium;
+    height: 25px;
+    min-width: 200px;
 }
 
 .main {

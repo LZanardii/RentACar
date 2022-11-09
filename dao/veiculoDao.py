@@ -27,6 +27,13 @@ class VeiculoDao:
   def get_all_modelos(self):
     return session.query(entities.Veiculo.modelo).all()
 
+  def get_veiculos_disponiveis_by_cidade_id(self, id):
+    return session.query(entities.Veiculo).where(entities.Veiculo.cidade_id == id).where(entities.Veiculo.disponivel == True).all()
+
+  def update_disponibilidade(self, veiculo_id, boolean):
+    session.query(entities.Veiculo).where(entities.Veiculo.id == veiculo_id).update({entities.Veiculo.disponivel:boolean})
+    session.commit()
+
 
 
         

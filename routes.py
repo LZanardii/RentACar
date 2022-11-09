@@ -1,10 +1,11 @@
 from app import app
-from service import veiculoService, locacoesService, clienteService
+from service import veiculoService, locacoesService, cidadeService, clienteService
 import flask
 from flask import render_template, send_file, request, redirect, url_for, flash
 from forms import SearchLocacoesForms, SearchVeiculosForms, LocarVeiculoForms
-from utils import create_json_locacao, create_file_locacao, create_file_resumo
+from utils import create_json_locacao, create_file_locacao, create_file_resumo, locacao_validations, create_json_veiuclos_disponiveis
 from datetime import date
+import json
 
 @app.route('/')
 @app.route('/home')
@@ -25,12 +26,25 @@ def veiculos():
 def locacao():
   form = LocarVeiculoForms()
   if form.is_submitted() and form.is_valid():
+    cidade_service = cidadeService.CidadeService()
     cliente_service = clienteService.ClienteService()
-    if cliente_service.have_locacao_ativa_search_by_name(form.cliente.data):
-      flash(f'Cliente {form.cliente.data} possui locação em aberto! Finalize antes de realizar outra locação')
-      return redirect(url_for('locacao'))
-    return render_template('locacao.html', form=form)
+    veiculos_disponiveis = create_json_veiuclos_disponiveis(locacao_validations(form.cliente.data, form.cidade.data))
+    return render_template('locacao.html', form=form, veiculos=veiculos_disponiveis,\
+      cidade_id=cidade_service.get_cidade_id_by_name(form.cidade.data), \
+        cliente_id=cliente_service.get_cliente_id_by_name(form.cliente.data))
   return render_template('locacao.html', form=form)
+
+@app.route('/veiculos/locacao/save', methods=['GET', 'POST'])
+def locacao_save():
+  if request.method == 'GET':
+    return redirect(url_for('locacao'))
+  locacao_service = locacoesService.LocacoesService()
+  try:
+    locacao_service.create_locacao(request.form['cliente'], request.form['cidade'], request.form['veiculo'], request.form['diaria'])
+    return redirect(url_for('locacao'))
+  except Exception as e:
+    flash(e)
+    return redirect(url_for('locacao'))
 
 
 @app.route('/veiculos/devolucao', methods=['GET', 'POST'])
@@ -53,7 +67,7 @@ def locacoes():
 
 @app.route('/locacoes/download', methods=['POST', 'GET'])
 def locacoes_md_download():
-  if flask.request.method == 'GET':
+  if request.method == 'GET':
     return redirect(url_for('locacoes'))
   name = f'RentACar-RelatorioLocacoes.md'
   create_file_locacao(name, request.form['locacoes'])

@@ -8,3 +8,6 @@ session = Session()
 class CidadeDao:
     def get_all_cidades(self):
         return session.query(entities.Cidade.nome).all()
+    
+    def get_id_by_name(self, name):
+        return session.query(entities.Cidade).where(entities.Cidade.nome == name).first()
