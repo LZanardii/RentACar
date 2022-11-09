@@ -41,3 +41,14 @@ class LocacaoDao:
           .join(cidade_origem, cidade_origem.id == entities.Locacao.cidade_origem_id)\
             .join(cidade_destino, cidade_destino.id == entities.Locacao.cidade_destino_id)\
               .where().all()
+
+  def get_locacoes_abertas_by_cliente_id(self, id):
+    cidade_origem = aliased(entities.Cidade)
+    cidade_destino = aliased(entities.Cidade)
+    
+    return session.query(entities.Locacao)\
+      .join(entities.Cliente)\
+        .join(entities.Veiculo)\
+          .join(cidade_origem, cidade_origem.id == entities.Locacao.cidade_origem_id)\
+            .outerjoin(cidade_destino, cidade_destino.id == entities.Locacao.cidade_destino_id, isouter=True)\
+              .where(entities.Cliente.id == id).filter(entities.Locacao.km_rodado == None).all()

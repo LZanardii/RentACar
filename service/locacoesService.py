@@ -2,13 +2,15 @@
 from dao import locacaoDao
 
 class LocacoesService:
+  ERRO_RESPONSE = "Erro ao carregar locações"
+
   def get_locacoes_by_params(self, cliente, modelo):
     locacao = locacaoDao.LocacaoDao()
     query = locacao.get_locacoes_by_params(cliente, modelo)
     if query:
       return query
     else:
-      return["Erro ao carregar locações"]
+      return[self.ERRO_RESPONSE]
 
   def get_locacoes_finalizadas(self):
     locacao = locacaoDao.LocacaoDao()
@@ -16,7 +18,15 @@ class LocacoesService:
     if query:
       return query
     else:
-      return["Erro ao carregar locações"]
+      return[self.ERRO_RESPONSE]
+
+  def have_locacoes_abertas_by_cliente_id(self, id):
+    locacao = locacaoDao.LocacaoDao()
+    query = locacao.get_locacoes_abertas_by_cliente_id(id)
+    if query:
+      return True
+    else:
+      return False
 
   def get_resumo_todas_locacoes_finalizadas(self, locacoes_finalizadas):
     km_total = 0

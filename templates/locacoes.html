@@ -5,6 +5,15 @@
 <section class="main">
   <h1>Consultar Locações</h1>
 
+  {% if get_flashed_messages() %}
+    <div class="alert">
+      {% for message in get_flashed_messages() %}
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <strong>Cuidado!</strong> {{ message }}
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <form action="{{ url_for('locacoes') }}" method="post">
     {{ form.csrf_token }}
     <p>CLIENTE:</p>
@@ -17,31 +26,31 @@
 
   <p></p>
 
-  <table>
-    <tr>
-      <th>
-        Cliente
-      </th>
-      <th>
-        Modelo
-      </th>
-      <th>
-        Cidade de Origem
-      </th>
-      <th>
-        Cidade de Destino
-      </th>
-      <th>
-        KM Rodados
-      </th>
-      <th>
-        Quantidade de Dias
-      </th>
-      <th>
-        Valor Total
-      </th>
-    </tr>
-    {% if locacoes %}
+  {% if locacoes %}
+    <table>
+      <tr>
+        <th>
+          Cliente
+        </th>
+        <th>
+          Modelo
+        </th>
+        <th>
+          Cidade de Origem
+        </th>
+        <th>
+          Cidade de Destino
+        </th>
+        <th>
+          KM Rodados
+        </th>
+        <th>
+          Quantidade de Dias
+        </th>
+        <th>
+          Valor Total
+        </th>
+      </tr>
       {% if locacoes[0].cliente %}
         {% for locacao in locacoes %}
           <tr>
@@ -87,14 +96,8 @@
           </td>
         </tr>
       {% endif %}
-    {% else %}
-      <tr>
-        <td colspan="9" class="center">
-          Preencha algum campo de consulta para pesquisar!
-        </td>
-      </tr> 
-    {% endif %}
-  </table>
+    </table>
+  {% endif %}
 
   {% if mkdjson %}
     <form action="{{ url_for('locacoes_md_download')}}" method = "post">
