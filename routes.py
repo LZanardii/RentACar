@@ -58,7 +58,13 @@ def locacoes():
   if form.is_submitted() and form.is_valid():
     locacoes = locacoesService.LocacoesService()
     query = locacoes.get_locacoes_by_params(form.cliente.data, form.modelo.data)
-    return render_template('locacoes.html', form=form, locacoes=query, mkdjson=create_json_locacao(query))
+    post_json = create_json_locacao(query)
+    if post_json:
+      return render_template('locacoes.html', form=form, locacoes=query, mkdjson=post_json)
+    else:
+      print("entrei")
+      flash("Não existem locações com os filtros selecionados")
+      return redirect(url_for('locacoes'))
   elif form.is_submitted() and form.is_valid() == False:
     flash("Selecione ao menos um dos campos abaixo")
     return redirect(url_for('locacoes'))

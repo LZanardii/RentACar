@@ -3,21 +3,23 @@ from service import clienteService, cidadeService
 from flask import redirect, url_for, flash
 
 def create_json_locacao(locacoes):
-  NULL_ATRIBUTE = "Dado nao mapeado"
-  list_locacoes = []
-  for locacao in locacoes:
-    list_locacoes.append(
-      {
-        "cliente":str(locacao.cliente.nome), 
-        "modelo":str(locacao.veiculo.modelo), 
-        "cidade_origem":str(locacao.cidade_origem.nome), 
-        "cidade_destino":str(locacao.cidade_destino.nome if locacao.cidade_destino else NULL_ATRIBUTE), 
-        "km_rodado":str(locacao.km_rodado if locacao.km_rodado else NULL_ATRIBUTE), 
-        "qtd_dias":str(locacao.qt_dias_reservados), 
-        "valor_total":str(locacao.km_rodado * locacao.veiculo.valor_km_rodado + locacao.qt_dias_reservados * locacao.veiculo.valor_km_rodado if locacao.km_rodado else 'Locação nao finalizada'), 
-      }
-    )
-  return json.dumps(list_locacoes)
+  if locacoes:
+    NULL_ATRIBUTE = "Dado nao mapeado"
+    list_locacoes = []
+    for locacao in locacoes:
+      list_locacoes.append(
+        {
+          "cliente":str(locacao.cliente.nome), 
+          "modelo":str(locacao.veiculo.modelo), 
+          "cidade_origem":str(locacao.cidade_origem.nome), 
+          "cidade_destino":str(locacao.cidade_destino.nome if locacao.cidade_destino else NULL_ATRIBUTE), 
+          "km_rodado":str(locacao.km_rodado if locacao.km_rodado else NULL_ATRIBUTE), 
+          "qtd_dias":str(locacao.qt_dias_reservados), 
+          "valor_total":str(locacao.km_rodado * locacao.veiculo.valor_km_rodado + locacao.qt_dias_reservados * locacao.veiculo.valor_km_rodado if locacao.km_rodado else 'Locação nao finalizada'), 
+        }
+      )
+    return json.dumps(list_locacoes)
+  return None
 
 def create_file_locacao(name, locacoes):
   locacoes_json = json.loads(locacoes)

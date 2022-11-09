@@ -10,7 +10,7 @@ class LocacoesService:
     if query:
       return query
     else:
-      return[self.ERRO_RESPONSE]
+      return None
 
   def get_locacoes_finalizadas(self):
     locacao = locacaoDao.LocacaoDao()
