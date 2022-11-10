@@ -47,14 +47,14 @@ def locacao_validations(cliente, cidade):
   cidade_service = cidadeService.CidadeService()
 
   if cliente_service.have_locacao_ativa_search_by_name(cliente):
-    flash(f'Cliente {cliente} possui locação em aberto! Finalize antes de realizar outra locação')
+    flash(f'Cliente {cliente} possui locação em aberto! Finalize antes de realizar outra locação', category='alert')
     redirect(url_for('locacao'))
     return
 
   veiculos_disponiveis = cidade_service.get_veiculos_disponiveis_by_cidade_name(cidade)
 
   if len(veiculos_disponiveis) == 0:
-    flash(f'{cidade} não possui carros disponíveis')
+    flash(f'{cidade} não possui carros disponíveis', category='alert')
     redirect(url_for('locacao'))
     return
   return veiculos_disponiveis

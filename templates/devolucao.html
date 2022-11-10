@@ -2,10 +2,32 @@
 
 {% block main %}
 
-<section>
-    <div style="padding: 10px; background-color: #EEE; margin: 20px">
-        <h1>Devolução</h1>
-    </div>
+<section class="main">
+  <h1>Devolução Veículos</h1>
+
+  {% if get_flashed_messages() %}
+  <div class="alert">
+    {% for message in get_flashed_messages() %}
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    <strong>Cuidado!</strong> {{ message }}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form action="{{ url_for('devolucao') }}" method="post">
+    {{ form.csrf_token }}
+    <p>CLIENTE:</p>
+    {{ form.cliente }}
+    <p>CIDADE DE DESTINO:</p>
+    {{ form.cidade }}
+    <p>QUILOMETRAGEM:</p>
+    {{ form.quilometragem }}
+    <p></p>
+    {{ form.submit }}
+  </form>
+
+  <p></p>
+
 </section>
 
 {% endblock %}

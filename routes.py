@@ -2,7 +2,7 @@ from app import app
 from service import veiculoService, locacoesService, cidadeService, clienteService
 import flask
 from flask import render_template, send_file, request, redirect, url_for, flash
-from forms import SearchLocacoesForms, SearchVeiculosForms, LocarVeiculoForms
+from forms import SearchLocacoesForms, SearchVeiculosForms, LocarVeiculoForms, DevolverVeiculoForms
 from utils import create_json_locacao, create_file_locacao, create_file_resumo, locacao_validations, create_json_veiuclos_disponiveis
 from datetime import date
 import json
@@ -25,7 +25,7 @@ def veiculos():
 @app.route('/veiculos/locacao', methods=['GET', 'POST'])
 def locacao():
   form = LocarVeiculoForms()
-  if form.is_submitted() and form.is_valid():
+  if form.is_submitted():
     cidade_service = cidadeService.CidadeService()
     cliente_service = clienteService.ClienteService()
     veiculos_disponiveis = create_json_veiuclos_disponiveis(locacao_validations(form.cliente.data, form.cidade.data))
@@ -39,8 +39,12 @@ def locacao_save():
   if request.method == 'GET':
     return redirect(url_for('locacao'))
   locacao_service = locacoesService.LocacoesService()
+  if (int(request.form['diaria']) <= 0):
+    flash("LOCAÇÃO NÃO FINALIZADA; Diária não pode ser menor ou igual a 0", category='alert')
+    return redirect(url_for('locacao'))
   try:
     locacao_service.create_locacao(request.form['cliente'], request.form['cidade'], request.form['veiculo'], request.form['diaria'])
+    flash(message="LOCAÇÃO FINALIZADA com sucesso", category='success')
     return redirect(url_for('locacao'))
   except Exception as e:
     flash(e)
@@ -49,7 +53,13 @@ def locacao_save():
 
 @app.route('/veiculos/devolucao', methods=['GET', 'POST'])
 def devolucao():
-  return render_template('devolucao.html')
+  form = DevolverVeiculoForms()
+  if form.is_submitted() and form.is_valid():
+    print("Entrei ")
+  elif form.is_submitted() and form.is_valid() == False:
+    flash("Quilometragem não pode ser menor que 0")
+    return redirect(url_for('devolucao'))
+  return render_template('devolucao.html', form=form)
 
 
 @app.route('/locacoes', methods=['GET', 'POST'])

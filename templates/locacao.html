@@ -5,14 +5,16 @@
 <section class="main">
   <h1>Locação Veículos</h1>
 
-  {% if get_flashed_messages() %}
-  <div class="alert">
-    {% for message in get_flashed_messages() %}
-    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-    <strong>Cuidado!</strong> {{ message }}
-    {% endfor %}
-  </div>
-  {% endif %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="{{category}}">
+          <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+          <strong>Cuidado!</strong> {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 
   <form action="{{ url_for('locacao') }}" method="post">
     {{ form.csrf_token }}
@@ -61,14 +63,14 @@
           {{veiculo["ano"]}}
         </td>
         <td style="max-width: 50px;">
-          <input type="radio" id='{{veiculo["modelo"]}}-{{veiculo["cor"]}}-{{veiculo["ano"]}}' name="veiculo" value='{{veiculo["id"]}}'>
+          <input required type="radio" id='{{veiculo["modelo"]}}-{{veiculo["cor"]}}-{{veiculo["ano"]}}' name="veiculo" value='{{veiculo["id"]}}'>
         </td>
       </tr>
       {% endfor %}
     </table>
     <p></p>
     <label>Diárias</label>
-    <input style="max-width: 50px;" name='diaria' type="number">
+    <input required style="max-width: 50px;" name='diaria' type="number">
     <p></p>
     <input style="max-width: 50px;" type="submit" value="Realizar Locação">
   </form>
