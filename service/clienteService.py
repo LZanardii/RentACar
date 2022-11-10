@@ -14,6 +14,18 @@ class ClienteService:
       return clientes
     else:
       return["Erro ao carregar clientes"]
+
+  def get_all_nomes_clinetes_locacao_aberta_select(self):
+    cliente = clienteDao.ClienteDao()
+    query = cliente.get_clientes_locacao_aberta()
+    if query:
+      clientes = []
+      clientes.append("")
+      for cliente in query:
+        clientes.append(cliente.nome)
+      return clientes
+    else:
+      return["Erro ao carregar clientes"]
   
   def get_cliente_id_by_name(self, name):
     cliente_dao = clienteDao.ClienteDao()

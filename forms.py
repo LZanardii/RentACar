@@ -36,7 +36,7 @@ class DevolverVeiculoForms(FlaskForm):
   clientes = clienteService.ClienteService()
   cidades = cidadeService.CidadeService()
 
-  cliente = SelectField(choices=clientes.get_all_nomes_for_select(), validators=[DataRequired()])
+  cliente = SelectField(choices=clientes.get_all_nomes_clinetes_locacao_aberta_select(), validators=[DataRequired()])
   cidade = SelectField(choices=cidades.get_all_cidades_for_select(), validators=[DataRequired()])
   quilometragem = IntegerField('quilometragem', validators=[DataRequired()])
   submit = SubmitField('Prosseguir') 
