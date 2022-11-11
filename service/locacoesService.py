@@ -27,6 +27,14 @@ class LocacoesService:
       return True
     else:
       return False
+    
+  def get_locacao_aberta_by_cliente_name(self, name):
+    locacao = locacaoDao.LocacaoDao()
+    query = locacao.get_locacao_aberta_by_cliente_name(name)
+    if query:
+      return query
+    else:
+      return None
 
   def get_resumo_todas_locacoes_finalizadas(self, locacoes_finalizadas):
     km_total = 0
@@ -51,5 +59,11 @@ class LocacoesService:
       locacao.create_locacao(cliente, cidade, veiculo, diarias)
     except Exception as e:
       raise e
-    
+  
+  def finish_locacao(self, locacao_id, cidade_destino_id, km_rodado, veiculo_id):
+    try:
+      locacao = locacaoDao.LocacaoDao()
+      locacao.finish_locacao(int(locacao_id), int(cidade_destino_id), float(km_rodado), int(veiculo_id))
+    except Exception as e:
+      raise e
 

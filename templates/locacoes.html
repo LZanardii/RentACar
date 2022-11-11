@@ -82,7 +82,7 @@
             </td>
             <td>
               {% if locacao.km_rodado %}
-                {{locacao.km_rodado * locacao.veiculo.valor_km_rodado + locacao.qt_dias_reservados * locacao.veiculo.valor_km_rodado}}
+                {{locacao.km_rodado * locacao.veiculo.valor_km_rodado + locacao.qt_dias_reservados * locacao.veiculo.valor_diaria}}
               {% else %}
                 Locação não finalizada
               {% endif %}

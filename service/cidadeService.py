@@ -15,11 +15,11 @@ class CidadeService:
     else:
       return["Erro ao carregar cidades"]
 
-  def get_cidade_id_by_name(self, name):
+  def get_cidade_by_name(self, name):
     cidade_dao = cidadeDao.CidadeDao()
     cidade = cidade_dao.get_id_by_name(name)
     if cidade:
-      return cidade.id
+      return cidade
     else:
       return[]
   

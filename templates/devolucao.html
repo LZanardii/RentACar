@@ -5,15 +5,18 @@
 <section class="main">
   <h1>Devolução Veículos</h1>
 
-  {% if get_flashed_messages() %}
-  <div class="alert">
-    {% for message in get_flashed_messages() %}
-    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-    <strong>Cuidado!</strong> {{ message }}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="{{category}}">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <strong>Cuidado!</strong> {{ message }}
+      </div>
     {% endfor %}
-  </div>
   {% endif %}
+{% endwith %}
 
+  {% if form %}
   <form action="{{ url_for('devolucao') }}" method="post">
     {{ form.csrf_token }}
     <p>CLIENTE:</p>
@@ -25,8 +28,103 @@
     <p></p>
     {{ form.submit }}
   </form>
+  {% endif %}
 
   <p></p>
+ 
+  {% if locacao %}
+  <table>
+    <tr>
+      <th>
+        Modelo
+      </th>
+      <th>
+        Cor
+      </th>
+      <th>
+        Ano
+      </th>
+      <th>
+        Cidade de Origem
+      </th>
+      <th>
+        Cidade de Destino
+      </th>
+      <th>
+        KM Rodados
+      </th>
+      <th>
+        Quantidade de Dias
+      </th>
+      <th>
+        Valor Diaria
+      </th>
+      <th>
+        Valor KM Rodado
+      </th>
+      <th>
+        Total R$ Diárias
+      </th>
+      <th>
+        Total R$ KMs Rodados
+      </th>
+      <th>
+        Valor Total
+      </th>
+    </tr>
+    <tr>
+      <td>
+        {{locacao.veiculo.modelo}}
+      </td>
+      <td>
+        {{locacao.veiculo.cor}}
+      </td>
+      <td>
+        {{locacao.veiculo.ano}}
+      </td>
+      <td>
+        {{locacao.cidade_origem.nome}}
+      </td>
+      <td>
+        {{cidade.nome}}
+      </td>
+      <td>
+        {{quilometragem}}
+      </td>
+      <td>
+        {{locacao.qt_dias_reservados}}
+      </td>
+      <td>
+        {{locacao.veiculo.valor_diaria}}
+      </td>
+      <td>
+        {{locacao.veiculo.valor_km_rodado}}
+      </td>
+      <td>
+        {{(locacao.qt_dias_reservados) * locacao.veiculo.valor_diaria}}
+      </td>
+      <td>
+        {{quilometragem * locacao.veiculo.valor_km_rodado}}
+      </td>
+      <td>
+        <strong>{{quilometragem * locacao.veiculo.valor_km_rodado + locacao.qt_dias_reservados * locacao.veiculo.valor_diaria}}</strong>
+      </td>
+    </tr>
+  </table>
+
+  <p></p>
+
+  <form action="{{url_for('devolucao_save')}}" method="post" class="main">
+    <input style="display: none;" type = "text" name='locacao_id' value ='{{locacao.id}}' />
+    <input style="display: none;" type = "text" name='cidade_destino_id' value ='{{cidade.id}}' />
+    <input style="display: none;" type = "text" name='km_rodado' value ='{{quilometragem}}' />
+    <input style="display: none;" type = "text" name='veiculo_id' value ='{{locacao.veiculo.id}}' />
+    <p></p>
+    <input type = "submit" value = "Realizar Devolução" />
+  </form>
+  {% endif %}
+
+
 
 </section>
 

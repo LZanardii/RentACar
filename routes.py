@@ -30,7 +30,7 @@ def locacao():
     cliente_service = clienteService.ClienteService()
     veiculos_disponiveis = create_json_veiuclos_disponiveis(locacao_validations(form.cliente.data, form.cidade.data))
     return render_template('locacao.html', form=form, veiculos=veiculos_disponiveis,\
-      cidade_id=cidade_service.get_cidade_id_by_name(form.cidade.data), \
+      cidade_id=cidade_service.get_cidade_by_name(form.cidade.data).id, \
         cliente_id=cliente_service.get_cliente_id_by_name(form.cliente.data))
   return render_template('locacao.html', form=form)
 
@@ -55,11 +55,27 @@ def locacao_save():
 def devolucao():
   form = DevolverVeiculoForms()
   if form.is_submitted() and form.is_valid():
-    print("Entrei ")
+    cidade_service = cidadeService.CidadeService()
+    locacoes_service = locacoesService.LocacoesService()
+    locacao = locacoes_service.get_locacao_aberta_by_cliente_name(form.cliente.data)
+    return render_template('devolucao.html', form=form, locacao=locacao, cidade=cidade_service.get_cidade_by_name(form.cidade.data), quilometragem=float(form.quilometragem.data))
   elif form.is_submitted() and form.is_valid() == False:
     flash("Quilometragem não pode ser menor que 0")
     return redirect(url_for('devolucao'))
   return render_template('devolucao.html', form=form)
+
+@app.route('/veiculos/devolucao/save', methods=['GET', 'POST'])
+def devolucao_save():
+  if request.method == 'GET':
+    return redirect(url_for('devolucao'))
+  try:
+    locacoes_service = locacoesService.LocacoesService()
+    locacoes_service.finish_locacao(request.form['locacao_id'], request.form['cidade_destino_id'], request.form['km_rodado'], request.form['veiculo_id'])
+    flash(message="DEVOLUÇÃO FINALIZADA com sucesso", category='success')
+    return redirect(url_for('devolucao'))
+  except Exception:
+    flash("Erro ao finalizar devolução", category='alert')
+    return redirect(url_for('devolucao'))
 
 
 @app.route('/locacoes', methods=['GET', 'POST'])
