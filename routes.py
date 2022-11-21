@@ -64,6 +64,7 @@ def devolucao():
     return redirect(url_for('devolucao'))
   return render_template('devolucao.html', form=form)
 
+
 @app.route('/veiculos/devolucao/save', methods=['GET', 'POST'])
 def devolucao_save():
   if request.method == 'GET':
